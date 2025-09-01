@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
 function MovieCard({ movie }) {
@@ -41,69 +41,65 @@ function MovieCard({ movie }) {
     }
   };
   return (
-    <div
-      className="bg-white/90 rounded-2xl shadow-xl border border-blue-100 hover:shadow-2xl transition duration-300 flex flex-col overflow-hidden max-w-xs mx-auto my-6 cursor-pointer hover:-translate-y-1 hover:scale-102"
-      key={movie.id}
-      onClick={() => navigate(`/description/${movie.id}`)}
-    >
-      <div className="w-full h-64 bg-gradient-to-br from-blue-200 via-white to-blue-300 overflow-hidden rounded-t-2xl flex items-center justify-center">
-        <img
-          className="w-full h-full object-cover rounded-t-2xl transition duration-300 shadow-lg border-2 border-blue-200"
-          src={"https://image.tmdb.org/t/p/w500" + movie.poster_path}
-          alt={movie.title}
-        />
-      </div>
-      <div className="p-5 flex flex-col justify-between flex-1 gap-2">
-        <h3
-          className="text-xl font-extrabold text-blue-900 mb-1 truncate drop-shadow-md"
-          title={movie.title}
-        >
-          {movie.title}
-        </h3>
-        <p className="text-gray-700 text-sm mb-2 line-clamp-3">
-          {movie.overview}
-        </p>
-        <div className="flex items-center justify-between mt-2">
-          <span className="text-yellow-500 font-bold text-lg drop-shadow">
-            ⭐ {movie.vote_average.toFixed(1)}
-          </span>
-          <button
-            className="px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-700 text-xs font-bold shadow transition"
-            onClick={(e) => {
-              e.stopPropagation();
-              // Double click logic for favourites
-              if (clickTimeout) {
-                clearTimeout(clickTimeout);
-                setClickTimeout(null);
-                const favouriteMovies =
-                  JSON.parse(localStorage.getItem("favouriteMovies")) || [];
-                const movieExists = favouriteMovies.find(
-                  (favouriteMovie) => favouriteMovie.id === movie.id
-                );
-                if (!movieExists) {
-                  favouriteMovies.push(movie);
-                  localStorage.setItem(
-                    "favouriteMovies",
-                    JSON.stringify(favouriteMovies)
-                  );
-                  toast.success("Movie added to favourites!");
-                } else {
-                  toast("Movie already exists in favourites ", { icon: "⭐" });
-                }
-              } else {
-                const timeout = setTimeout(() => {
+    <Link to={`/description/${movie.id}`} className="block">
+      <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl shadow-lg overflow-hidden transition-transform duration-200 hover:scale-102 cursor-pointer border border-gray-200">
+        <div className="w-full h-64 flex items-center justify-center bg-gray-100">
+          <img
+            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+            alt={movie.title}
+            className="object-contain h-full w-full"
+          />
+        </div>
+        <div className="p-4">
+          <h3 className="text-lg font-bold mb-2 text-gray-800 font-sans">
+            {movie.title}
+          </h3>
+          <p className="text-sm text-gray-600 mb-2 line-clamp-2 font-sans">
+            {movie.overview}
+          </p>
+          <div className="flex items-center justify-between">
+            <span className="text-yellow-500 font-bold">
+              ⭐ {movie.vote_average}
+            </span>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                // Double click logic for favourites
+                if (clickTimeout) {
+                  clearTimeout(clickTimeout);
                   setClickTimeout(null);
-                }, 200);
-                setClickTimeout(timeout);
-              }
-            }}
-            title="Add to Favourites"
-          >
-            ⭐ Favourite
-          </button>
+                  const favouriteMovies =
+                    JSON.parse(localStorage.getItem("favouriteMovies")) || [];
+                  const movieExists = favouriteMovies.find(
+                    (favouriteMovie) => favouriteMovie.id === movie.id
+                  );
+                  if (!movieExists) {
+                    favouriteMovies.push(movie);
+                    localStorage.setItem(
+                      "favouriteMovies",
+                      JSON.stringify(favouriteMovies)
+                    );
+                    toast.success("Movie added to favourites!");
+                  } else {
+                    toast("Movie already exists in favourites ", {
+                      icon: "⭐",
+                    });
+                  }
+                } else {
+                  const timeout = setTimeout(() => {
+                    setClickTimeout(null);
+                  }, 200);
+                  setClickTimeout(timeout);
+                }
+              }}
+              className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-3 py-1 rounded shadow hover:from-pink-600 hover:to-purple-600 font-sans"
+            >
+              Favourite
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

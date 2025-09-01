@@ -3,26 +3,31 @@
 @tailwind utilities;
 
 body {
-	@apply bg-gradient-to-br from-blue-100 via-white to-blue-300 min-h-screen font-sans text-blue-900;
+  @apply bg-gradient-to-br from-blue-100 via-white to-blue-300 min-h-screen font-sans text-blue-900;
 }
 
-h1, h2, h3, h4, h5, h6 {
-	@apply font-extrabold text-blue-900 drop-shadow;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-extrabold text-blue-900 drop-shadow;
 }
 
 a {
-	@apply text-blue-700 hover:text-blue-900 transition underline-offset-2;
+  @apply text-blue-700 hover:text-blue-900 transition underline-offset-2;
 }
 
 button {
-	@apply transition duration-200;
+  @apply transition duration-200;
 }
 
 ::-webkit-scrollbar {
-	width: 8px;
-	background: #dbeafe;
+  width: 8px;
+  background: #dbeafe;
 }
 ::-webkit-scrollbar-thumb {
-	background: #3b82f6;
-	border-radius: 8px;
+  background: #3b82f6;
+  border-radius: 8px;
 }

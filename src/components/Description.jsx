@@ -30,7 +30,9 @@ export default function Description() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-gradient-to-br from-blue-200 via-white to-blue-400">
-        <span className="text-3xl text-blue-900 font-bold animate-pulse">Loading...</span>
+        <span className="text-3xl text-blue-900 font-bold animate-pulse">
+          Loading...
+        </span>
       </div>
     );
   }
@@ -51,10 +53,16 @@ export default function Description() {
             <span className="text-2xl">
               <i className="fa-solid fa-star"></i>
             </span>
-            {movie.vote_average.toFixed(1)}<span className="text-blue-900">/10</span>
+            {movie.vote_average.toFixed(1)}
+            <span className="text-blue-900">/10</span>
           </p>
         </div>
-        <a href={movie.homepage} target="_blank" rel="noreferrer" className="mx-auto">
+        <a
+          href={movie.homepage}
+          target="_blank"
+          rel="noreferrer"
+          className="mx-auto"
+        >
           <img
             className="w-80 h-96 object-cover rounded-2xl shadow-lg border-4 border-blue-200 mx-auto"
             src={"https://image.tmdb.org/t/p/w500" + movie.poster_path}
@@ -62,7 +70,9 @@ export default function Description() {
           />
         </a>
         <p className="mx-8 text-lg text-blue-900 font-semibold">
-          <span className="font-light text-lg text-blue-700">Description: </span>
+          <span className="font-light text-lg text-blue-700">
+            Description:{" "}
+          </span>
           {movie.overview}
         </p>
       </div>
