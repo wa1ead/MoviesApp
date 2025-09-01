@@ -144,21 +144,16 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-300 px-0 md:px-10">
-      <header className="flex flex-col md:flex-row items-center justify-between gap-6 p-6 md:p-10 bg-white/90 rounded-b-3xl shadow-2xl mb-8 border-b-4 border-blue-200">
-        <div className="flex items-center gap-4">
-          <Link to="/">
-            <img
-              src="../moviesapp-logo.png"
-              alt="MoviesApp Logo"
-              className="w-32 h-16 drop-shadow-xl hover:scale-105 transition"
-            />
-          </Link>
-          <span className="text-3xl md:text-4xl font-extrabold text-blue-900 tracking-tight drop-shadow-lg select-none">
-            MoviesApp
-          </span>
-        </div>
+      <header className="flex flex-col md:flex-row items-center justify-between gap-6 p-6 md:p-10 bg-white/95 rounded-b-3xl shadow-2xl mb-8 border-b-4 border-blue-200">
+        <Link to="/" className="flex items-center">
+          <img
+            src="../moviesapp-logo.png"
+            alt="MoviesApp Logo"
+            className="w-32 h-16 drop-shadow-xl hover:scale-105 transition rounded-xl border-2 border-blue-200 bg-blue-50"
+          />
+        </Link>
         <div className="flex flex-col md:flex-row gap-4 items-center">
-          <div className="rounded-lg bg-blue-100 shadow-md px-4 py-2 flex gap-4 items-center">
+          <div className="rounded-lg bg-blue-100 shadow-md px-2 py-1 flex gap-2 items-center border border-blue-200">
             <SearchBar handleSearch={handleSearch} />
             <Modal
               modal={modal}
@@ -169,7 +164,7 @@ export default function Home() {
           </div>
           <Link
             to="/favourites"
-            className="font-bold text-blue-900 text-lg md:text-xl hover:underline hover:text-blue-700 transition px-4 py-2 rounded-lg bg-blue-50 shadow hover:bg-blue-100"
+            className="font-bold text-blue-900 text-lg md:text-xl hover:underline hover:text-blue-700 transition px-4 py-2 rounded-lg bg-blue-50 shadow hover:bg-blue-100 border border-blue-200"
           >
             <span className="inline-block align-middle">⭐ Favourites</span>
           </Link>

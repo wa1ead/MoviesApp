@@ -42,16 +42,15 @@ function MovieCard({ movie }) {
   };
   return (
     <div
-      className="bg-white/90 rounded-2xl shadow-xl border border-blue-100 hover:shadow-2xl transition duration-300 flex flex-col overflow-hidden max-w-xs mx-auto my-6 hover:-translate-y-1 hover:scale-105"
+      className="bg-white/90 rounded-2xl shadow-xl border border-blue-100 hover:shadow-2xl transition duration-300 flex flex-col overflow-hidden max-w-xs mx-auto my-6 cursor-pointer hover:-translate-y-1 hover:scale-102"
       key={movie.id}
+      onClick={() => navigate(`/description/${movie.id}`)}
     >
       <div className="w-full h-64 bg-gradient-to-br from-blue-200 via-white to-blue-300 overflow-hidden rounded-t-2xl flex items-center justify-center">
         <img
-          className="w-full h-full object-cover rounded-t-2xl transition duration-300 hover:scale-110 shadow-lg border-2 border-blue-200"
+          className="w-full h-full object-cover rounded-t-2xl transition duration-300 shadow-lg border-2 border-blue-200"
           src={"https://image.tmdb.org/t/p/w500" + movie.poster_path}
           alt={movie.title}
-          onClick={() => navigate(`/description/${movie.id}`)}
-          style={{ cursor: "pointer" }}
         />
       </div>
       <div className="p-5 flex flex-col justify-between flex-1 gap-2">
@@ -70,7 +69,8 @@ function MovieCard({ movie }) {
           </span>
           <button
             className="px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-700 text-xs font-bold shadow transition"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               // Double click logic for favourites
               if (clickTimeout) {
                 clearTimeout(clickTimeout);

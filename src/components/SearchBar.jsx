@@ -1,7 +1,7 @@
 function SearchBar({ handleSearch }) {
   return (
     <>
-      <div className="flex w-10 items-center justify-center rounded-tl-lg rounded-bl-lg border-r border-gray-200 bg-white p-2">
+      <div className="flex w-10 items-center justify-center rounded-tl-lg rounded-bl-lg border-r border-gray-200 bg-white p-0 h-8 min-h-0">
         <svg
           viewBox="0 0 20 20"
           aria-hidden="true"
@@ -12,8 +12,8 @@ function SearchBar({ handleSearch }) {
       </div>
       <input
         type="text"
-        className="w-full bg-white pl-2 text-base font-semibold outline-0"
-        placeholder="Movie Tiltle"
+        className="w-full bg-white pl-2 text-base font-semibold outline-0 h-8 min-h-0"
+        placeholder="Movie Title"
         onKeyPress={(e) => {
           if (e.key === "Enter") handleSearch(e);
         }}
