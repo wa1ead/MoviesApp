@@ -19,8 +19,7 @@ async function fetchSearchedMovies({ query }) {
     method: "GET",
     headers: {
       accept: "application/json",
-      //HIDING THE TOKEN INTO DOTENV FILE
-      Authorization: process.env.REACT_APP_API_KEY,
+      Authorization: import.meta.env.VITE_API_KEY,
     },
   };
 
