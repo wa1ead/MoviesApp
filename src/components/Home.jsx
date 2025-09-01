@@ -133,20 +133,32 @@ export default function Home() {
     // console.log(formData);
   }
 
-  if (loading) return <p>...!</p>;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen bg-gradient-to-br from-blue-200 via-white to-blue-400">
+        <span className="text-3xl text-blue-900 font-bold animate-pulse">
+          Loading...
+        </span>
+      </div>
+    );
 
   return (
-    <div className="bg-blue-200 px-10">
-      <div className="flex items-center justify-between p-4 max-md:flex-col gap-4 pb-8 border-b-2 border-blue-950">
-        <Link to="/">
-          <img
-            src="../moviesapp-icon.png"
-            alt="moviesApp"
-            className="w-36 h-20"
-          />
-        </Link>
-        <div className="rounded-lg bg-gray-200 ">
-          <div className="flex">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-300 px-0 md:px-10">
+      <header className="flex flex-col md:flex-row items-center justify-between gap-6 p-6 md:p-10 bg-white/90 rounded-b-3xl shadow-2xl mb-8 border-b-4 border-blue-200">
+        <div className="flex items-center gap-4">
+          <Link to="/">
+            <img
+              src="../moviesapp-logo.png"
+              alt="MoviesApp Logo"
+              className="w-32 h-16 drop-shadow-xl hover:scale-105 transition"
+            />
+          </Link>
+          <span className="text-3xl md:text-4xl font-extrabold text-blue-900 tracking-tight drop-shadow-lg select-none">
+            MoviesApp
+          </span>
+        </div>
+        <div className="flex flex-col md:flex-row gap-4 items-center">
+          <div className="rounded-lg bg-blue-100 shadow-md px-4 py-2 flex gap-4 items-center">
             <SearchBar handleSearch={handleSearch} />
             <Modal
               modal={modal}
@@ -155,41 +167,51 @@ export default function Home() {
               handleSaveMovie={handleSaveMovie}
             />
           </div>
+          <Link
+            to="/favourites"
+            className="font-bold text-blue-900 text-lg md:text-xl hover:underline hover:text-blue-700 transition px-4 py-2 rounded-lg bg-blue-50 shadow hover:bg-blue-100"
+          >
+            <span className="inline-block align-middle">⭐ Favourites</span>
+          </Link>
         </div>
-        <Link to="/favourites" className="font-bold text-gray-700 text-xl">
-          Favourites⭐
-        </Link>
-      </div>
+      </header>
       {/* Featured Film Section */}
       {searchedMovies.length === 0 && movies.length > 0 && (
-        <div className="mx-16 my-10 p-8 bg-white rounded-xl shadow-lg flex flex-col items-center">
-          <h2 className="text-4xl font-bold text-blue-950 mb-4">Featured Film</h2>
-          <div className="w-full flex flex-col md:flex-row items-center gap-8">
-            <img
-              className="w-80 h-80 rounded-lg"
-              src={"https://image.tmdb.org/t/p/w500" + movies[0].poster_path}
-              alt={movies[0].title}
-            />
-            <div className="flex-1">
-              <h3 className="text-2xl font-bold text-gray-800 mb-2">{movies[0].title}</h3>
-              <p className="text-gray-600 mb-2">{movies[0].overview}</p>
-              <p className="text-yellow-500 font-bold text-lg mb-2">⭐ {movies[0].vote_average.toFixed(1)}</p>
-              <button
-                className="mt-4 px-6 py-2 bg-blue-950 text-white rounded-lg hover:bg-blue-800 transition"
-                onClick={() => window.location.href = `/description/${movies[0].id}`}
-              >
-                View Description
-              </button>
-            </div>
+        <section className="mx-auto my-10 p-8 bg-white/90 rounded-3xl shadow-2xl flex flex-col md:flex-row items-center gap-10 max-w-5xl">
+          <img
+            className="w-72 h-96 object-cover rounded-2xl shadow-lg border-4 border-blue-200"
+            src={"https://image.tmdb.org/t/p/w500" + movies[0].poster_path}
+            alt={movies[0].title}
+          />
+          <div className="flex-1 flex flex-col gap-4">
+            <h2 className="text-4xl font-extrabold text-blue-900 mb-2 drop-shadow-lg">
+              {movies[0].title}
+            </h2>
+            <p className="text-gray-700 text-lg mb-2 line-clamp-5">
+              {movies[0].overview}
+            </p>
+            <p className="text-yellow-500 font-bold text-xl mb-2">
+              ⭐ {movies[0].vote_average.toFixed(1)}
+            </p>
+            <button
+              className="mt-4 px-8 py-3 bg-blue-900 text-white rounded-xl hover:bg-blue-700 shadow-md font-semibold text-lg transition"
+              onClick={() =>
+                (window.location.href = `/description/${movies[0].id}`)
+              }
+            >
+              View Description
+            </button>
           </div>
-        </div>
+        </section>
       )}
       {/* Trending Films List */}
-      {searchedMovies.length > 0 ? (
-        <SearchedMoviesList movies={searchedMovies} title={title} />
-      ) : (
-        <PopularMoviesList movies={movies.slice(1)} />
-      )}
+      <main className="mt-8">
+        {searchedMovies.length > 0 ? (
+          <SearchedMoviesList movies={searchedMovies} title={title} />
+        ) : (
+          <PopularMoviesList movies={movies.slice(1)} />
+        )}
+      </main>
     </div>
   );
 }

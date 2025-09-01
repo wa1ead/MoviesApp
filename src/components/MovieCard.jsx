@@ -41,31 +41,69 @@ function MovieCard({ movie }) {
     }
   };
   return (
-    <button onClick={handleClick}>
-      <div
-        className="flex flex-col bg-white border shadow-sm rounded-xl h-[80vh] max-md:m-auto max-md:w-[80%] max-md:mt-8 dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/70 transition ease-in-out transform hover:scale-110 hover:translate-y-1 duration-300"
-        key={movie.id}
-      >
+    <div
+      className="bg-white/90 rounded-2xl shadow-xl border border-blue-100 hover:shadow-2xl transition duration-300 flex flex-col overflow-hidden max-w-xs mx-auto my-6 hover:-translate-y-1 hover:scale-105"
+      key={movie.id}
+    >
+      <div className="w-full h-64 bg-gradient-to-br from-blue-200 via-white to-blue-300 overflow-hidden rounded-t-2xl flex items-center justify-center">
         <img
-          className="w-full h-60 rounded-t-xl"
+          className="w-full h-full object-cover rounded-t-2xl transition duration-300 hover:scale-110 shadow-lg border-2 border-blue-200"
           src={"https://image.tmdb.org/t/p/w500" + movie.poster_path}
           alt={movie.title}
+          onClick={() => navigate(`/description/${movie.id}`)}
+          style={{ cursor: "pointer" }}
         />
-        <div className="p-4 flex flex-col h-[200px] overflow-y-clip md:p-5">
-          <h3 className="text-md font-bold text-gray-800 dark:text-white">
-            {movie.title}
-          </h3>
-          <p className="mt-1 text-sm text-gray-500 dark:text-neutral-400 ">
-            {movie.overview}
-          </p>
-        </div>
-        <div className="p-4">
-          <p className="mt-1 text-yellow-400">
-            ⭐Rating: <b>{movie.vote_average.toFixed(1)}</b>
-          </p>
+      </div>
+      <div className="p-5 flex flex-col justify-between flex-1 gap-2">
+        <h3
+          className="text-xl font-extrabold text-blue-900 mb-1 truncate drop-shadow-md"
+          title={movie.title}
+        >
+          {movie.title}
+        </h3>
+        <p className="text-gray-700 text-sm mb-2 line-clamp-3">
+          {movie.overview}
+        </p>
+        <div className="flex items-center justify-between mt-2">
+          <span className="text-yellow-500 font-bold text-lg drop-shadow">
+            ⭐ {movie.vote_average.toFixed(1)}
+          </span>
+          <button
+            className="px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-700 text-xs font-bold shadow transition"
+            onClick={() => {
+              // Double click logic for favourites
+              if (clickTimeout) {
+                clearTimeout(clickTimeout);
+                setClickTimeout(null);
+                const favouriteMovies =
+                  JSON.parse(localStorage.getItem("favouriteMovies")) || [];
+                const movieExists = favouriteMovies.find(
+                  (favouriteMovie) => favouriteMovie.id === movie.id
+                );
+                if (!movieExists) {
+                  favouriteMovies.push(movie);
+                  localStorage.setItem(
+                    "favouriteMovies",
+                    JSON.stringify(favouriteMovies)
+                  );
+                  toast.success("Movie added to favourites!");
+                } else {
+                  toast("Movie already exists in favourites ", { icon: "⭐" });
+                }
+              } else {
+                const timeout = setTimeout(() => {
+                  setClickTimeout(null);
+                }, 200);
+                setClickTimeout(timeout);
+              }
+            }}
+            title="Add to Favourites"
+          >
+            ⭐ Favourite
+          </button>
         </div>
       </div>
-    </button>
+    </div>
   );
 }
 
