@@ -160,10 +160,35 @@ export default function Home() {
           Favourites⭐
         </Link>
       </div>
+      {/* Featured Film Section */}
+      {searchedMovies.length === 0 && movies.length > 0 && (
+        <div className="mx-16 my-10 p-8 bg-white rounded-xl shadow-lg flex flex-col items-center">
+          <h2 className="text-4xl font-bold text-blue-950 mb-4">Featured Film</h2>
+          <div className="w-full flex flex-col md:flex-row items-center gap-8">
+            <img
+              className="w-80 h-80 rounded-lg"
+              src={"https://image.tmdb.org/t/p/w500" + movies[0].poster_path}
+              alt={movies[0].title}
+            />
+            <div className="flex-1">
+              <h3 className="text-2xl font-bold text-gray-800 mb-2">{movies[0].title}</h3>
+              <p className="text-gray-600 mb-2">{movies[0].overview}</p>
+              <p className="text-yellow-500 font-bold text-lg mb-2">⭐ {movies[0].vote_average.toFixed(1)}</p>
+              <button
+                className="mt-4 px-6 py-2 bg-blue-950 text-white rounded-lg hover:bg-blue-800 transition"
+                onClick={() => window.location.href = `/description/${movies[0].id}`}
+              >
+                View Description
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Trending Films List */}
       {searchedMovies.length > 0 ? (
         <SearchedMoviesList movies={searchedMovies} title={title} />
       ) : (
-        <PopularMoviesList movies={movies} />
+        <PopularMoviesList movies={movies.slice(1)} />
       )}
     </div>
   );
