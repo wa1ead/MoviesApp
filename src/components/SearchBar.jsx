@@ -1,4 +1,9 @@
-function SearchBar({ handleSearch }) {
+import { useContext } from "react";
+import MovieContext from "../context/MovieContext";
+
+function SearchBar() {
+  const { title, setTitle } = useContext(MovieContext);
+
   return (
     <>
       <div className="flex w-10 items-center justify-center rounded-tl-lg rounded-bl-lg border-r border-gray-200 bg-white p-0 h-8 min-h-0">
@@ -12,11 +17,10 @@ function SearchBar({ handleSearch }) {
       </div>
       <input
         type="text"
-        className="w-full bg-white pl-2 text-base font-semibold outline-0 h-8 min-h-0"
-        placeholder="Movie Title"
-        onKeyPress={(e) => {
-          if (e.key === "Enter") handleSearch(e);
-        }}
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="Search movies..."
+        className="px-4 py-2 rounded-lg border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white text-gray-800 w-64 shadow-sm"
       />
     </>
   );
