@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
 //IMPORTING FETCHING MOVIES FUNCTION FROM SERVICES FOLDER
 import fetchPopularMovies from "../services/fetchPopularMovies";
 //IMPORTING SEARCHED MOVIES FUNCTION FROM SERVICES FOLDER
 import fetchSearchedMovies from "../services/fetchSearchedMovies";
 //IMPORTING OTHER COMPONENTS
+import Navigation from "./Navigation";
 import PopularMoviesList from "./PopularMoviesList";
 import SearchedMoviesList from "./SearchedMoviesList";
 import MovieContext from "../context/MovieContext";
-import { FaHome, FaThList, FaSearch, FaUser } from "react-icons/fa";
 
 export default function Home() {
   //THE MOVIES DATA STATE
@@ -161,36 +159,6 @@ export default function Home() {
             <PopularMoviesList movies={movies.slice(1)} />
           )}
         </main>
-        {/* Bottom Navigation Bar */}
-        <nav className="fixed bottom-0 left-0 w-full bg-white/95 border-t-2 border-blue-200 shadow-2xl flex justify-between items-center z-50">
-          <Link
-            to="/"
-            className="flex-1 flex flex-col items-center py-3 hover:bg-blue-100 transition"
-          >
-            <FaHome className="text-blue-700 text-2xl mb-1" />
-            <span className="text-blue-900 font-semibold text-sm">Home</span>
-          </Link>
-          <Link
-            to="/categories"
-            className="flex-1 flex flex-col items-center py-3 hover:bg-blue-100 transition"
-          >
-            <FaThList className="text-blue-700 text-2xl mb-1" />
-            <span className="text-blue-900 font-semibold text-sm">
-              Categories
-            </span>
-          </Link>
-          <div className="flex-1 flex flex-col items-center py-3 hover:bg-blue-100 transition cursor-pointer">
-            <FaSearch className="text-blue-700 text-2xl mb-1" />
-            <span className="text-blue-900 font-semibold text-sm">Search</span>
-          </div>
-          <Link
-            to="/profile"
-            className="flex-1 flex flex-col items-center py-3 hover:bg-blue-100 transition"
-          >
-            <FaUser className="text-blue-700 text-2xl mb-1" />
-            <span className="text-blue-900 font-semibold text-sm">Profile</span>
-          </Link>
-        </nav>
       </div>
     </MovieContext.Provider>
   );
