@@ -6,11 +6,10 @@ import fetchPopularMovies from "../services/fetchPopularMovies";
 //IMPORTING SEARCHED MOVIES FUNCTION FROM SERVICES FOLDER
 import fetchSearchedMovies from "../services/fetchSearchedMovies";
 //IMPORTING OTHER COMPONENTS
-import SearchBar from "./SearchBar";
-import Modal from "./Modal";
 import PopularMoviesList from "./PopularMoviesList";
 import SearchedMoviesList from "./SearchedMoviesList";
 import MovieContext from "../context/MovieContext";
+import { FaHome, FaThList, FaSearch, FaUser } from "react-icons/fa";
 
 export default function Home() {
   //THE MOVIES DATA STATE
@@ -124,33 +123,7 @@ export default function Home() {
     <MovieContext.Provider
       value={{ title, setTitle, searchedMovies, setSearchedMovies }}
     >
-      <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-300 px-0 md:px-10">
-        <header className="flex flex-col md:flex-row items-center justify-between gap-6 p-6 md:p-10 bg-white/95 rounded-b-3xl shadow-2xl mb-8 border-b-4 border-blue-200">
-          <Link to="/" className="flex items-center">
-            <img
-              src="../moviesapp-logo.png"
-              alt="MoviesApp Logo"
-              className="w-32 h-16 drop-shadow-xl hover:scale-105 transition rounded-xl border-2 border-blue-200 bg-blue-50"
-            />
-          </Link>
-          <div className="flex flex-col md:flex-row gap-4 items-center">
-            <div className="rounded-lg bg-blue-100 shadow-md px-2 py-1 flex gap-2 items-center border border-blue-200">
-              <SearchBar />
-              <Modal
-                modal={modal}
-                handleClickModal={handleClickModal}
-                handleInputChange={handleInputChange}
-                handleSaveMovie={handleSaveMovie}
-              />
-            </div>
-            <Link
-              to="/favourites"
-              className="font-bold text-blue-900 text-lg md:text-xl hover:underline hover:text-blue-700 transition px-4 py-2 rounded-lg bg-blue-50 shadow hover:bg-blue-100 border border-blue-200"
-            >
-              <span className="inline-block align-middle">⭐ Favourites</span>
-            </Link>
-          </div>
-        </header>
+      <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-300 px-0 md:px-10 pb-24">
         {/* Featured Film Section */}
         {searchedMovies.length === 0 && movies.length > 0 && (
           <section className="mx-auto my-10 p-8 bg-white/90 rounded-3xl shadow-2xl flex flex-col md:flex-row items-center gap-10 max-w-5xl">
@@ -188,6 +161,36 @@ export default function Home() {
             <PopularMoviesList movies={movies.slice(1)} />
           )}
         </main>
+        {/* Bottom Navigation Bar */}
+        <nav className="fixed bottom-0 left-0 w-full bg-white/95 border-t-2 border-blue-200 shadow-2xl flex justify-between items-center z-50">
+          <Link
+            to="/"
+            className="flex-1 flex flex-col items-center py-3 hover:bg-blue-100 transition"
+          >
+            <FaHome className="text-blue-700 text-2xl mb-1" />
+            <span className="text-blue-900 font-semibold text-sm">Home</span>
+          </Link>
+          <Link
+            to="/categories"
+            className="flex-1 flex flex-col items-center py-3 hover:bg-blue-100 transition"
+          >
+            <FaThList className="text-blue-700 text-2xl mb-1" />
+            <span className="text-blue-900 font-semibold text-sm">
+              Categories
+            </span>
+          </Link>
+          <div className="flex-1 flex flex-col items-center py-3 hover:bg-blue-100 transition cursor-pointer">
+            <FaSearch className="text-blue-700 text-2xl mb-1" />
+            <span className="text-blue-900 font-semibold text-sm">Search</span>
+          </div>
+          <Link
+            to="/profile"
+            className="flex-1 flex flex-col items-center py-3 hover:bg-blue-100 transition"
+          >
+            <FaUser className="text-blue-700 text-2xl mb-1" />
+            <span className="text-blue-900 font-semibold text-sm">Profile</span>
+          </Link>
+        </nav>
       </div>
     </MovieContext.Provider>
   );
