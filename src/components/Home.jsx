@@ -4,7 +4,6 @@ import fetchPopularMovies from "../services/fetchPopularMovies";
 //IMPORTING SEARCHED MOVIES FUNCTION FROM SERVICES FOLDER
 import fetchSearchedMovies from "../services/fetchSearchedMovies";
 //IMPORTING OTHER COMPONENTS
-import Navigation from "./Navigation";
 import PopularMoviesList from "./PopularMoviesList";
 import SearchedMoviesList from "./SearchedMoviesList";
 import MovieContext from "../context/MovieContext";

@@ -3,6 +3,7 @@ import { Toaster } from "react-hot-toast";
 import Home from "./components/Home";
 import Description from "./components/Description";
 import Favourites from "./components/Favourites";
+import Search from "./components/Search";
 import Navigation from "./components/Navigation";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         <Route index path="/" element={<Home />} />
         <Route path="/description/:id" element={<Description />} />
         <Route path="/favourites" element={<Favourites />} />
+        <Route path="/search" element={<Search />} />
       </Routes>
       {/* Bottom Navigation Bar */}
       <Navigation />
