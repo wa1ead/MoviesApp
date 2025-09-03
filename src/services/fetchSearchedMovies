@@ -1,18 +1,14 @@
 import axios from "axios";
 
 export default async function fetchSearchedMovies({ query }) {
-  if (!query || query.trim() === "") {
-    return []; // Return an empty array if query is empty
-  }
+  if (!query || query.trim() === "") return [];
 
   const url = `https://api.themoviedb.org/3/search/movie?query=${query.trim()}`;
-
   const config = {
     method: "GET",
     headers: {
       accept: "application/json",
-      //HIDING THE TOKEN INTO DOTENV FILE
-      Authorization: process.env.REACT_APP_API_KEY,
+      Authorization: import.meta.env.VITE_API_KEY,
     },
   };
 

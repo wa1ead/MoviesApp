@@ -3,38 +3,14 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 //IMPORTING FETCHING MOVIES FUNCTION FROM SERVICES FOLDER
 import fetchPopularMovies from "../services/fetchPopularMovies";
-// import fetchSearchedMovies from "../services/fetchSearchedMovies";
+//IMPORTING SEARCHED MOVIES FUNCTION FROM SERVICES FOLDER
+import fetchSearchedMovies from "../services/fetchSearchedMovies";
 //IMPORTING OTHER COMPONENTS
 import SearchBar from "./SearchBar";
 import Modal from "./Modal";
 import PopularMoviesList from "./PopularMoviesList";
 import SearchedMoviesList from "./SearchedMoviesList";
 import MovieContext from "../context/MovieContext";
-
-//DECLARING FETCH SEARCHED MOVIES FUNCTION IN HOME COMPONENT DUE TO AN UNEXPECTED IMPORTING ERROR
-async function fetchSearchedMovies({ query }) {
-  if (!query || query.trim() === "") return [];
-
-  const url = `https://api.themoviedb.org/3/search/movie?query=${query.trim()}`;
-  const config = {
-    method: "GET",
-    headers: {
-      accept: "application/json",
-      Authorization: import.meta.env.VITE_API_KEY,
-    },
-  };
-
-  try {
-    // Axios handles JSON parsing automatically
-    const response = await axios.get(url, config);
-    const searchedMoviesData = response.data.results;
-    console.log("searched:", searchedMoviesData);
-    return searchedMoviesData;
-  } catch (err) {
-    console.error("Error fetching searched movies:", err);
-    throw err;
-  }
-}
 
 export default function Home() {
   //THE MOVIES DATA STATE
