@@ -15,7 +15,7 @@ function App() {
         <Routes>
           <Route index path="/" element={<Home />} />
           <Route path="/description/:id" element={<Description />} />
-          <Route path="/favourites" element={<Favourites />} />q
+          <Route path="/favourites" element={<Favourites />} />
           <Route path="/search" element={<Search />} />
         </Routes>
         {/* Bottom Navigation Bar */}

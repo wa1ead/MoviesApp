@@ -7,7 +7,7 @@ export default function Description() {
   const { id } = useParams();
   const navigate = useNavigate();
   //THE MOVIE DATA STATE
-  const [movie, setMovie] = useState({});
+  const [movie, setMovie] = useState(null);
   const { loading, setLoading } = useContext(MovieContext);
   console.log(id);
 
@@ -71,9 +71,9 @@ export default function Description() {
             <span className="text-blue-900">/10</span>
           </p>
         </div>
-        {posterSrc && (
+        {posterSrc && movie?.homepage ? (
           <a
-            href={movie?.homepage || "#"}
+            href={movie.homepage}
             target="_blank"
             rel="noreferrer"
             className="mx-auto"
@@ -84,6 +84,14 @@ export default function Description() {
               alt={safeTitle}
             />
           </a>
+        ) : (
+          posterSrc && (
+            <img
+              className="w-80 h-96 object-cover rounded-2xl shadow-lg border-4 border-blue-200 mx-auto"
+              src={posterSrc}
+              alt={safeTitle}
+            />
+          )
         )}
         <p className="mx-8 text-lg text-blue-900 font-semibold">
           <span className="font-light text-lg text-blue-700">
