@@ -46,23 +46,6 @@ export default function Home() {
     popularMovies();
   }, [setMovies, setLoading]);
 
-  //DISPLAYING LIST OF SEARCHED MOVIES
-  useEffect(() => {
-    async function searchedMoviesFunc() {
-      try {
-        setLoading(true);
-        const searchedMoviesData = await fetchSearchedMovies({ query: title });
-        setSearchedMovies(searchedMoviesData);
-      } catch (err) {
-        console.error("Error: ", err);
-        throw err;
-      } finally {
-        setLoading(false);
-      }
-    }
-    searchedMoviesFunc();
-  }, [title, setSearchedMovies, setLoading]);
-
   //HANDLING CLICK ADD MOVIE BUTTON EVENT
   function handleClickModal() {
     setModal(!modal);
