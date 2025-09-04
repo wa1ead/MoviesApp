@@ -9,12 +9,6 @@ import SearchedMoviesList from "./SearchedMoviesList";
 import MovieContext from "../context/MovieContext";
 
 export default function Home() {
-  //THE MOVIES DATA STATE
-  const [movies, setMovies] = useState([]);
-  //The searched movies state
-  const [searchedMovies, setSearchedMovies] = useState([]);
-  //The searchBar input state
-  const [title, setTitle] = useState("");
   //THE DISPLAY MODAL STATE
   const [modal, setModal] = useState(false);
   //THE FORMDATA INPUTTED STATE
@@ -24,8 +18,6 @@ export default function Home() {
     poster: "",
     rating: 0,
   });
-  //THE LOADING STATE
-  const [loading, setLoading] = useState(true);
 
   //INSERTING DATA INTO MOVIES STATE
   useEffect(() => {
