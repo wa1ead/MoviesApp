@@ -1,16 +1,12 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 
-const MovieContext = createContext();
+export const MovieContext = createContext();
 
-const MovieProvider = () => {
-  //THE MOVIES DATA STATE
+export function MovieProvider({ children }) {
   const [movies, setMovies] = useState([]);
-  //The searched movies state
   const [searchedMovies, setSearchedMovies] = useState([]);
-  //The searchBar input state
   const [title, setTitle] = useState("");
-  //THE LOADING STATE
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   return (
     <MovieContext.Provider
@@ -21,11 +17,14 @@ const MovieProvider = () => {
         setSearchedMovies,
         title,
         setTitle,
+        loading,
+        setLoading,
       }}
     >
       {children}
     </MovieContext.Provider>
   );
-};
+}
 
+// Default export should be the context (components import default as MovieContext)
 export default MovieContext;

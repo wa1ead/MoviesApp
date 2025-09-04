@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import fetchMovieDetails from "../services/fetchMovieDetails";
 
 export default function Description() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [movie, setMovie] = useState(null);
-  const [loading, setLoading] = useState(true); // Loading state
+  //THE MOVIE DATA STATE
+  const { movie, setMovie, loading, setLoading } = useContext(MovieContext);
   console.log(id);
 
   useEffect(() => {
