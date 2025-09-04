@@ -59,7 +59,7 @@ function MovieCard({ movie }) {
           </p>
           <div className="flex items-center justify-between">
             <span className="text-yellow-500 font-bold">
-              ⭐ {movie.vote_average}
+              ⭐ {movie.vote_average.toFixed(1)}
             </span>
             <button
               onClick={(e) => {

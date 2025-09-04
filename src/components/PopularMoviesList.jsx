@@ -16,8 +16,11 @@ function PopularMoviesList() {
       </h2>
       <div className="grid grid-cols-3 gap-10 max-md:grid-cols-1 max-lg:grid-cols-2">
         {displayMovies.map((movie) => (
-          <div className="transition-transform duration-300 hover:scale-105 hover:z-10">
-            <MovieCard movie={movie} key={movie.id} />
+          <div
+            className="transition-transform duration-300 hover:scale-105 hover:z-10"
+            key={movie.id}
+          >
+            <MovieCard movie={movie} />
           </div>
         ))}
       </div>

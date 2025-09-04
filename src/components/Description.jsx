@@ -1,17 +1,20 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import MovieContext from "../context/MovieContext";
 import fetchMovieDetails from "../services/fetchMovieDetails";
 
 export default function Description() {
   const { id } = useParams();
   const navigate = useNavigate();
   //THE MOVIE DATA STATE
-  const { movie, setMovie, loading, setLoading } = useContext(MovieContext);
+  const [movie, setMovie] = useState({});
+  const { loading, setLoading } = useContext(MovieContext);
   console.log(id);
 
   useEffect(() => {
     async function fetchMovie() {
       try {
+        setLoading(true);
         //SETTING DATA COMMING FROM FETCH FUNCTION INTO VARIABLE
         const movieData = await fetchMovieDetails({ id });
         //SETTING THE DATA VARIABLE INTO MOVIE STATE
@@ -36,6 +39,17 @@ export default function Description() {
       </div>
     );
   }
+
+  const safeTitle = movie?.original_title || movie?.title || "Untitled";
+  const safeOverview = movie?.overview || "No description available.";
+  const safeRating =
+    typeof movie?.vote_average === "number"
+      ? movie.vote_average.toFixed(1)
+      : "N/A";
+  const posterSrc = movie?.poster_path
+    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+    : null;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-300 px-0 py-10 flex flex-col items-center">
       <button
@@ -47,33 +61,35 @@ export default function Description() {
       <div className="w-full max-w-3xl py-8 flex flex-col gap-8 bg-white/90 rounded-3xl shadow-2xl border border-blue-200">
         <div className="flex w-full justify-between px-8 items-center">
           <h2 className="text-4xl font-extrabold text-blue-900 drop-shadow-lg">
-            {movie.original_title}
+            {safeTitle}
           </h2>
           <p className="text-yellow-500 font-bold text-xl flex items-center gap-2">
             <span className="text-2xl">
               <i className="fa-solid fa-star"></i>
             </span>
-            {movie.vote_average.toFixed(1)}
+            {safeRating}
             <span className="text-blue-900">/10</span>
           </p>
         </div>
-        <a
-          href={movie.homepage}
-          target="_blank"
-          rel="noreferrer"
-          className="mx-auto"
-        >
-          <img
-            className="w-80 h-96 object-cover rounded-2xl shadow-lg border-4 border-blue-200 mx-auto"
-            src={"https://image.tmdb.org/t/p/w500" + movie.poster_path}
-            alt={movie.original_title}
-          />
-        </a>
+        {posterSrc && (
+          <a
+            href={movie?.homepage || "#"}
+            target="_blank"
+            rel="noreferrer"
+            className="mx-auto"
+          >
+            <img
+              className="w-80 h-96 object-cover rounded-2xl shadow-lg border-4 border-blue-200 mx-auto"
+              src={posterSrc}
+              alt={safeTitle}
+            />
+          </a>
+        )}
         <p className="mx-8 text-lg text-blue-900 font-semibold">
           <span className="font-light text-lg text-blue-700">
             Description:{" "}
           </span>
-          {movie.overview}
+          {safeOverview}
         </p>
       </div>
     </div>
