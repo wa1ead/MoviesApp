@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import MovieContext from "../context/MovieContext";
 import fetchMovieDetails from "../services/fetchMovieDetails";
+import fetchMovieTrailer from "../services/fetchMovieTrailer";
 import axios from "axios";
 
 export default function MovieDescription() {
@@ -24,29 +25,10 @@ export default function MovieDescription() {
         setLoading(true);
         const data = await fetchMovieDetails({ id });
         setMovie(data);
-        // Fetch trailer videos
-        const config = {
-          method: "GET",
-          headers: {
-            accept: "application/json",
-            Authorization: import.meta.env.VITE_API_KEY,
-          },
-        };
-        try {
-          const videoRes = await axios.get(
-            `https://api.themoviedb.org/3/movie/${id}/videos`,
-            config
-          );
-          const videos = videoRes.data.results || [];
-          const trailer = videos.find(
-            (v) => v.site === "YouTube" && /trailer/i.test(v.type)
-          );
-          if (trailer) setTrailerKey(trailer.key);
-        } catch (videoErr) {
-          console.warn("Trailer fetch failed", videoErr);
-        }
-      } catch (e) {
-        console.error(e);
+        const trailer = await fetchMovieTrailer(id);
+        if (trailer) setTrailerKey(trailer.key);
+      } catch (err) {
+        console.error("Error: ", err);
       } finally {
         setLoading(false);
       }
