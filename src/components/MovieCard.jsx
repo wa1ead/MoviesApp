@@ -42,13 +42,13 @@ function MovieCard({ movie }) {
   };
   return (
     <Link to={`/description/${movie.id}`} className="block">
-      <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl shadow-lg overflow-hidden transition-transform duration-200 hover:scale-102 cursor-pointer border border-gray-200 h-[420px] flex flex-col">
+      <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl shadow-lg overflow-hidden transition-transform duration-200 hover:scale-102 cursor-pointer border border-gray-200 h-[480px] flex flex-col">
         {/* Poster Section */}
-        <div className="w-full h-64 flex items-center justify-center bg-gray-100">
+        <div className="w-full h-80 flex items-center justify-center bg-gray-100">
           <img
             src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
             alt={movie.title}
-            className="object-contain h-full w-full"
+            className="object-cover h-full w-full"
           />
         </div>
         {/* Content Section */}
