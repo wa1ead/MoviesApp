@@ -1,11 +1,11 @@
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { MovieProvider } from "./context/MovieContext";
 import Home from "./components/Home";
 import MovieDescription from "./components/MovieDescription";
 import Favourites from "./components/Favourites";
 import Search from "./components/Search";
 import Navigation from "./components/Navigation";
-import { MovieProvider } from "./context/MovieContext";
 
 function App() {
   return (

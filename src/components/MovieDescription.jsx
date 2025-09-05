@@ -7,10 +7,10 @@ import {
   FaCalendarAlt,
   FaClock,
 } from "react-icons/fa";
+import { MdOutlineSlowMotionVideo } from "react-icons/md";
 import MovieContext from "../context/MovieContext";
 import fetchMovieDetails from "../services/fetchMovieDetails";
 import fetchMovieTrailer from "../services/fetchMovieTrailer";
-import axios from "axios";
 
 export default function MovieDescription() {
   const { id } = useParams();
@@ -127,7 +127,7 @@ export default function MovieDescription() {
                   onClick={() => setShowTrailer(true)}
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold shadow-lg transition"
                 >
-                  ▶ Play Trailer
+                  <MdOutlineSlowMotionVideo /> Play Trailer
                 </button>
               )}
             </div>
@@ -167,6 +167,7 @@ export default function MovieDescription() {
                         key={c.id}
                         className="px-4 py-1.5 rounded-full bg-white border border-blue-200 text-blue-700 text-sm shadow-sm"
                       >
+                        <img src={c.logo_path} />
                         {c.name}
                       </span>
                     ))}
