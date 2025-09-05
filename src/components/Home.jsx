@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 //IMPORTING FETCHING MOVIES FUNCTION FROM SERVICES FOLDER
 import fetchPopularMovies from "../services/fetchPopularMovies";
 //IMPORTING OTHER COMPONENTS
+import FeaturedFilm from "./FeaturedFilm";
 import PopularMoviesList from "./PopularMoviesList";
 import MovieContext from "../context/MovieContext";
 
@@ -24,17 +25,9 @@ export default function Home() {
     }
     popularMovies();
   }, [setMovies, setLoading]);
+  console.log(movies);
 
-  //HANDLING CHANGE FORM DATA INPUT
-  function handleInputChange(e) {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-  }
-
-  if (loading)
+  if (loading || movies.length === 0)
     return (
       <div className="flex items-center justify-center h-screen bg-gradient-to-br from-blue-200 via-white to-blue-400">
         <span className="text-3xl text-blue-900 font-bold animate-pulse">
@@ -44,36 +37,9 @@ export default function Home() {
     );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-300 px-0 md:px-10 pb-24">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-300 px-0   md:px-10 pb-24">
       {/* Featured Film Section */}
-
-      <section className="mx-auto my-10 p-8 bg-white/90 rounded-3xl shadow-2xl flex flex-col md:flex-row items-center gap-10 max-w-5xl">
-        <img
-          className="w-72 h-96 object-cover rounded-2xl shadow-lg border-4 border-blue-200"
-          src={"https://image.tmdb.org/t/p/w500" + movies[0].poster_path}
-          alt={movies[0].title}
-        />
-        <div className="flex-1 flex flex-col gap-4">
-          <h2 className="text-4xl font-extrabold text-blue-900 mb-2 drop-shadow-lg">
-            {movies[0].title}
-          </h2>
-          <p className="text-gray-700 text-lg mb-2 line-clamp-5">
-            {movies[0].overview}
-          </p>
-          <p className="text-yellow-500 font-bold text-xl mb-2">
-            ⭐ {movies[0].vote_average.toFixed(1)}
-          </p>
-          <button
-            className="mt-4 px-8 py-3 bg-blue-900 text-white rounded-xl hover:bg-blue-700 shadow-md font-semibold text-lg transition"
-            onClick={() =>
-              (window.location.href = `/description/${movies[0].id}`)
-            }
-          >
-            View Description
-          </button>
-        </div>
-      </section>
-
+      <FeaturedFilm movie={movies[0]} />
       {/* Trending Films List */}
       <main className="mt-8">
         <PopularMoviesList movies={movies.slice(1)} />
