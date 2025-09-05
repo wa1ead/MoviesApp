@@ -42,7 +42,8 @@ function MovieCard({ movie }) {
   };
   return (
     <Link to={`/description/${movie.id}`} className="block">
-      <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl shadow-lg overflow-hidden transition-transform duration-200 hover:scale-102 cursor-pointer border border-gray-200">
+      <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl shadow-lg overflow-hidden transition-transform duration-200 hover:scale-102 cursor-pointer border border-gray-200 h-[420px] flex flex-col">
+        {/* Poster Section */}
         <div className="w-full h-64 flex items-center justify-center bg-gray-100">
           <img
             src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -50,14 +51,15 @@ function MovieCard({ movie }) {
             className="object-contain h-full w-full"
           />
         </div>
-        <div className="p-4">
-          <h3 className="text-lg font-bold mb-2 text-gray-800 font-sans">
+        {/* Content Section */}
+        <div className="p-4 flex flex-col flex-1">
+          <h3 className="text-lg font-bold mb-2 text-gray-800 font-sans line-clamp-1">
             {movie.title}
           </h3>
-          <p className="text-sm text-gray-600 mb-2 line-clamp-2 font-sans">
+          <p className="text-sm text-gray-600 mb-3 font-sans line-clamp-3 h-[60px]">
             {movie.overview}
           </p>
-          <div className="flex items-center justify-between">
+          <div className="mt-auto flex items-center justify-between">
             <span className="text-yellow-500 font-bold">
               ⭐ {movie.vote_average.toFixed(1)}
             </span>
@@ -92,7 +94,7 @@ function MovieCard({ movie }) {
                   setClickTimeout(timeout);
                 }
               }}
-              className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-3 py-1 rounded shadow hover:from-pink-600 hover:to-purple-600 font-sans"
+              className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-3 py-1 rounded shadow hover:from-pink-600 hover:to-purple-600 font-sans text-sm"
             >
               Favourite
             </button>
