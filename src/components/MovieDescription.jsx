@@ -162,15 +162,25 @@ export default function MovieDescription() {
                     Production
                   </h3>
                   <div className="flex flex-wrap gap-3">
-                    {movie.production_companies.slice(0, 6).map((c) => (
-                      <span
-                        key={c.id}
-                        className="px-4 py-1.5 rounded-full bg-white border border-blue-200 text-blue-700 text-sm shadow-sm"
-                      >
-                        <img src={c.logo_path} />
-                        {c.name}
-                      </span>
-                    ))}
+                    {movie.production_companies.slice(0, 6).map((c) =>
+                      c.logo_path ? (
+                        <div className="w-20 h-20">
+                          <img
+                            key={c.id}
+                            src={`https://image.tmdb.org/t/p/original${c.logo_path}`}
+                            alt={c.name}
+                            className="size-full object-contain"
+                          />
+                        </div>
+                      ) : (
+                        <div
+                          key={c.id}
+                          className="px-4 py-1.5 flex justify-center items-center rounded-full bg-white border border-blue-200 text-blue-700 text-sm shadow-sm"
+                        >
+                          <span>{c.name}</span>
+                        </div>
+                      )
+                    )}
                   </div>
                 </div>
               )}
