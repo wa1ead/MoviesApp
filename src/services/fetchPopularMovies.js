@@ -1,23 +1,33 @@
+import axios from "axios";
+
 export default async function fetchPopularMovies() {
-  const url =
-    "https://api.themoviedb.org/3/discover/movie?language=en-US&sort_by=popularity.desc";
-  const options = {
+  const config = {
     method: "GET",
     headers: {
       accept: "application/json",
       Authorization: import.meta.env.VITE_API_KEY,
     },
   };
+
   try {
-    //FETCHING MOVIES DATA FROM TMDB API
-    const response = await fetch(url, options);
-    //CONVERTING PARSED DATA INTO JSON
-    const data = await response.json();
-    //EXTRACTING DATA ARRAY FROM MOVIES OBJECT
-    const popularMoviesData = data.results;
-    console.log("popular:", popularMoviesData);
-    return popularMoviesData;
+    // Fetch first 3 pages to get 60 movies (20 per page)
+    const promises = [
+      axios.get("https://api.themoviedb.org/3/movie/popular?page=1", config),
+      axios.get("https://api.themoviedb.org/3/movie/popular?page=2", config),
+      axios.get("https://api.themoviedb.org/3/movie/popular?page=3", config),
+    ];
+
+    const responses = await Promise.all(promises);
+
+    // Combine results from all pages
+    const allMovies = responses.reduce((acc, response) => {
+      return acc.concat(response.data.results);
+    }, []);
+
+    console.log("Popular movies fetched:", allMovies.length);
+    return allMovies;
   } catch (err) {
+    console.error("Error fetching popular movies:", err);
     throw err;
   }
 }
