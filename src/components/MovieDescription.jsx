@@ -161,7 +161,7 @@ export default function MovieDescription() {
                   <h3 className="text-xl font-bold mb-3 text-blue-800">
                     Production
                   </h3>
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-3" key={movie.id}>
                     {movie.production_companies.slice(0, 6).map((c) =>
                       c.logo_path ? (
                         <div className="w-20 h-20">
