@@ -48,7 +48,7 @@ const MovieCard = ({ movie, onFavouriteClick = () => {} }) => {
         <img
           src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
           alt={movie.title}
-          className="w-full h-full object-contain md:object-cover transition-all duration-300 group-hover:blur-sm group-hover:brightness-50"
+          className="w-full h-full object-fill transition-all duration-300 group-hover:blur-sm group-hover:brightness-50"
         />
 
         {/* Hover Overlay */}
