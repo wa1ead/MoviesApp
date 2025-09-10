@@ -7,6 +7,7 @@ import Favourites from "./components/Favourites";
 import Search from "./components/Search";
 import Navigation from "./components/Navigation";
 import Categories from "./components/Categories";
+import CategoryPage from "./components/CategoryPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/favourites" element={<Favourites />} />
           <Route path="/search" element={<Search />} />
           <Route path="/categories" element={<Categories />} />
+          <Route path="/category/:genreId" element={<CategoryPage />} />
         </Routes>
         {/* Bottom Navigation Bar */}
         <Navigation />

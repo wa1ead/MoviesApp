@@ -10,7 +10,10 @@ export default async function fetchGenres() {
   };
 
   try {
-    const response = await axios.get("https://api.themoviedb.org/3/genre/movie/list", config);
+    const response = await axios.get(
+      "https://api.themoviedb.org/3/genre/movie/list",
+      config
+    );
     return response.data.genres;
   } catch (err) {
     console.error("Error fetching genres:", err);

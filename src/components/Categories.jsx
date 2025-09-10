@@ -1,15 +1,12 @@
 import { useState, useEffect, useContext } from "react";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import MovieContext from "../context/MovieContext";
-import MovieCard from "./MovieCard";
 import fetchGenres from "../services/fetchGenres";
-import fetchMoviesByGenre from "../services/fetchMoviesByGenre";
 
 function Categories() {
+  const navigate = useNavigate();
   const { loading, setLoading } = useContext(MovieContext);
   const [genres, setGenres] = useState([]);
-  const [expandedGenres, setExpandedGenres] = useState({});
-  const [genreMovies, setGenreMovies] = useState({});
 
   useEffect(() => {
     async function loadGenres() {
@@ -26,31 +23,16 @@ function Categories() {
     loadGenres();
   }, [setLoading]);
 
-  const toggleGenre = async (genreId) => {
-    const isExpanded = expandedGenres[genreId];
-    
-    if (!isExpanded) {
-      // Load movies for this genre if not already loaded
-      if (!genreMovies[genreId]) {
-        try {
-          setLoading(true);
-          const movies = await fetchMoviesByGenre(genreId);
-          setGenreMovies(prev => ({ ...prev, [genreId]: movies }));
-        } catch (err) {
-          console.error("Error loading movies for genre:", err);
-        } finally {
-          setLoading(false);
-        }
-      }
-    }
-
-    setExpandedGenres(prev => ({ ...prev, [genreId]: !isExpanded }));
+  const handleGenreClick = (genreId) => {
+    navigate(`/category/${genreId}`);
   };
 
   if (loading && genres.length === 0) {
     return (
       <div className="flex items-center justify-center h-screen bg-gradient-to-br from-blue-200 via-white to-blue-400">
-        <span className="text-3xl text-blue-900 font-bold animate-pulse">Loading...</span>
+        <span className="text-3xl text-blue-900 font-bold animate-pulse">
+          Loading...
+        </span>
       </div>
     );
   }
@@ -64,48 +46,25 @@ function Categories() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {genres.map((genre) => (
-            <div key={genre.id} className="bg-white/90 rounded-2xl shadow-xl border border-blue-200 overflow-hidden">
-              <button
-                onClick={() => toggleGenre(genre.id)}
-                className="w-full p-6 flex items-center justify-between hover:bg-blue-50 transition-colors"
-              >
-                <h2 className="text-xl font-bold text-blue-900">{genre.name}</h2>
-                <div className="flex items-center gap-2">
-                  {genreMovies[genre.id] && (
-                    <span className="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
-                      {genreMovies[genre.id].length}
-                    </span>
-                  )}
-                  {expandedGenres[genre.id] ? (
-                    <FaChevronUp className="text-blue-700 text-lg" />
-                  ) : (
-                    <FaChevronDown className="text-blue-700 text-lg" />
-                  )}
+            <button
+              key={genre.id}
+              onClick={() => handleGenreClick(genre.id)}
+              className="bg-white/90 rounded-2xl shadow-xl border border-blue-200 overflow-hidden hover:shadow-2xl hover:scale-105 transition-all duration-300 p-8 text-center group"
+            >
+              <div className="flex items-center justify-center mb-4">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <span className="text-2xl font-bold text-white">
+                    {genre.name.charAt(0)}
+                  </span>
                 </div>
-              </button>
-
-              {expandedGenres[genre.id] && (
-                <div className="p-4 pt-0 border-t border-blue-100">
-                  {loading && !genreMovies[genre.id] ? (
-                    <div className="text-center py-4">
-                      <span className="text-blue-900 animate-pulse">Loading movies...</span>
-                    </div>
-                  ) : genreMovies[genre.id] && genreMovies[genre.id].length > 0 ? (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                      {genreMovies[genre.id].slice(0, 6).map((movie) => (
-                        <div key={movie.id} className="transition-transform duration-300 hover:scale-105">
-                          <MovieCard movie={movie} />
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-4">
-                      <span className="text-gray-500">No movies found for this genre.</span>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+              </div>
+              <h2 className="text-xl font-bold text-blue-900 group-hover:text-blue-700 transition-colors">
+                {genre.name}
+              </h2>
+              <p className="text-sm text-blue-600 mt-2 opacity-75">
+                Explore {genre.name.toLowerCase()} movies
+              </p>
+            </button>
           ))}
         </div>
       </div>
