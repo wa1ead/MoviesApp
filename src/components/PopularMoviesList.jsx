@@ -14,7 +14,7 @@ function PopularMoviesList() {
         </span>
         <span>🌍</span>
       </h2>
-      <div className="grid grid-cols-4 gap-10 max-md:grid-cols-1 max-lg:grid-cols-3 px-10">
+      <div className="grid grid-cols-5 gap-10 max-md:grid-cols-1 max-lg:grid-cols-3 px-10">
         {displayMovies.map((movie) => (
           <div
             className="transition-transform duration-300 hover:scale-105 hover:z-10"
