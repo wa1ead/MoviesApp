@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 const MovieCard = ({ movie, onFavouriteClick = () => {} }) => {
   const navigate = useNavigate();
   const [clickTimeout, setClickTimeout] = useState(null);
+  const [imageError, setImageError] = useState(false);
 
   const handleClick = (e) => {
     if (clickTimeout) {
@@ -25,7 +26,9 @@ const MovieCard = ({ movie, onFavouriteClick = () => {} }) => {
           "favouriteMovies",
           JSON.stringify(favouriteMovies)
         );
-        toast.success("Movie added to favourites!");
+        toast.success("Movie added to favourites!", {
+          icon: "⭐",
+        });
       } else {
         toast("Movie already exists in favourites ", {
           icon: "⭐",
@@ -44,21 +47,43 @@ const MovieCard = ({ movie, onFavouriteClick = () => {} }) => {
   return (
     <Link to={`/description/${movie.id}`} className="block group">
       <div className="relative rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:scale-105 cursor-pointer h-[400px] bg-black">
-        {/* Poster Image */}
-        <img
-          src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-          alt={movie.title}
-          className="w-full h-full object-cover transition-all duration-300 group-hover:blur-sm group-hover:brightness-50"
-        />
+        {/* Poster Image or Placeholder */}
+        {!imageError && movie.poster_path ? (
+          <img
+            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+            alt={movie.title}
+            className="w-full h-full object-cover transition-all duration-300 group-hover:blur-sm group-hover:brightness-50"
+            onError={() => setImageError(true)}
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex flex-col items-center justify-center text-white p-4 transition-all duration-300 group-hover:brightness-75">
+            <div className="text-6xl mb-4 opacity-60">🎬</div>
+            <h3 className="text-lg font-bold text-center mb-2 line-clamp-2">
+              {movie.title}
+            </h3>
+            <div className="text-yellow-400 font-bold">
+              ⭐ {movie.vote_average.toFixed(1)}
+            </div>
+          </div>
+        )}
 
         {/* Hover Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-          <h3 className="text-white text-lg font-bold mb-2 line-clamp-2">
-            {movie.title}
-          </h3>
-          <p className="text-gray-200 text-sm mb-3 line-clamp-3">
-            {movie.overview}
-          </p>
+          {!imageError && movie.poster_path && (
+            <>
+              <h3 className="text-white text-lg font-bold mb-2 line-clamp-2">
+                {movie.title}
+              </h3>
+              <p className="text-gray-200 text-sm mb-3 line-clamp-3">
+                {movie.overview}
+              </p>
+            </>
+          )}
+          {(imageError || !movie.poster_path) && (
+            <p className="text-gray-200 text-sm mb-3 line-clamp-3">
+              {movie.overview}
+            </p>
+          )}
           <div className="flex items-center justify-between">
             <span className="text-yellow-400 font-bold flex items-center gap-1">
               ⭐ {movie.vote_average.toFixed(1)}

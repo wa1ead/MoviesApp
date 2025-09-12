@@ -59,7 +59,10 @@ export default function MovieDescription() {
   const release = movie.release_date || null;
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-blue-100 via-white to-blue-300 text-blue-900 pb-32">
+    <div
+      className="min-h-screen w-full bg-gradient-to-br from-blue-100 via-white to-blue-300 text-blue-900 pb-32"
+      key={movie.id}
+    >
       {/* Hero Image Section */}
       {poster && (
         <div className="w-full relative">
@@ -161,7 +164,7 @@ export default function MovieDescription() {
                   <h3 className="text-xl font-bold mb-3 text-blue-800">
                     Production
                   </h3>
-                  <div className="flex flex-wrap gap-3" key={movie.id}>
+                  <div className="flex flex-wrap gap-3">
                     {movie.production_companies.slice(0, 6).map((c) =>
                       c.logo_path ? (
                         <div className="w-20 h-20">
