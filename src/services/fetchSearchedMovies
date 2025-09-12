@@ -1,9 +1,17 @@
 import axios from "axios";
 
-export default async function fetchSearchedMovies({ query }) {
-  if (!query || query.trim() === "") return [];
+export default async function fetchSearchedMovies({
+  title,
+  setSearchedMovies,
+}) {
+  if (!title || title.trim() === "") {
+    setSearchedMovies([]);
+    return;
+  }
 
-  const url = `https://api.themoviedb.org/3/search/movie?query=${query.trim()}`;
+  const url = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(
+    title.trim()
+  )}`;
   const config = {
     method: "GET",
     headers: {
@@ -17,9 +25,9 @@ export default async function fetchSearchedMovies({ query }) {
     const response = await axios.get(url, config);
     const searchedMoviesData = response.data.results;
     console.log("searched:", searchedMoviesData);
-    return searchedMoviesData;
+    setSearchedMovies(searchedMoviesData);
   } catch (err) {
     console.error("Error fetching searched movies:", err);
-    throw err;
+    setSearchedMovies([]);
   }
 }
