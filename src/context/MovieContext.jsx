@@ -10,6 +10,8 @@ export function MovieProvider({ children }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMoreMovies, setHasMoreMovies] = useState(true);
   const [placeholderCards, setPlaceholderCards] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchPlaceholders, setSearchPlaceholders] = useState([]);
 
   return (
     <MovieContext.Provider
@@ -28,6 +30,10 @@ export function MovieProvider({ children }) {
         setHasMoreMovies,
         placeholderCards,
         setPlaceholderCards,
+        searchLoading,
+        setSearchLoading,
+        searchPlaceholders,
+        setSearchPlaceholders,
       }}
     >
       {children}

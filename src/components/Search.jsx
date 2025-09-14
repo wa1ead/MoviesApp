@@ -1,42 +1,87 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useCallback, useState } from "react";
 import MovieContext from "../context/MovieContext";
 import MovieCard from "./MovieCard";
+import PlaceholderCard from "./PlaceholderCard";
 import fetchSearchedMovies from "../services/fetchSearchedMovies";
 
 function Search() {
-  const { searchedMovies, setSearchedMovies, title, setTitle } =
-    useContext(MovieContext);
+  const { 
+    searchedMovies, 
+    setSearchedMovies, 
+    title, 
+    setTitle,
+    searchLoading,
+    setSearchLoading,
+    searchPlaceholders,
+    setSearchPlaceholders
+  } = useContext(MovieContext);
+  
   const inputRef = useRef(null);
+  const [loadingMovies, setLoadingMovies] = useState({});
+
+  // Function to create placeholder cards
+  const createSearchPlaceholders = useCallback((count) => {
+    const placeholders = Array.from({ length: count }, (_, index) => ({
+      id: `search-placeholder-${Date.now()}-${index}`,
+      isPlaceholder: true
+    }));
+    return placeholders;
+  }, []);
 
   // Focus on input when component mounts
   useEffect(() => {
     inputRef.current.focus();
   }, []);
 
-  // Fetch movies when title changes
+  // Enhanced fetch function with placeholders
+  const searchWithPlaceholders = useCallback(async (searchTitle) => {
+    if (!searchTitle.trim()) {
+      setSearchedMovies([]);
+      setSearchPlaceholders([]);
+      return;
+    }
+
+    try {
+      setSearchLoading(true);
+      
+      // Show placeholder cards immediately (estimate 8-12 results)
+      const newPlaceholders = createSearchPlaceholders(10);
+      setSearchPlaceholders(newPlaceholders);
+      
+      // Clear previous results
+      setSearchedMovies([]);
+      
+      // Fetch search results
+      await fetchSearchedMovies({ title: searchTitle, setSearchedMovies });
+      
+      // After getting results, hide placeholders and show real data with stagger
+      setTimeout(() => {
+        setSearchPlaceholders([]);
+        setSearchLoading(false);
+      }, 800); // Give time for smooth transition
+      
+    } catch (error) {
+      console.error("Error fetching movies:", error);
+      setSearchedMovies([]);
+      setSearchPlaceholders([]);
+      setSearchLoading(false);
+    }
+  }, [setSearchedMovies, setSearchPlaceholders, setSearchLoading, createSearchPlaceholders]);
+
+  // Fetch movies when title changes with debounce
   useEffect(() => {
-    const delayDebounceFn = setTimeout(async () => {
-      if (title.trim()) {
-        try {
-          await fetchSearchedMovies({ title, setSearchedMovies });
-          console.log("Search query:", title);
-        } catch (error) {
-          console.error("Error fetching movies:", error);
-          setSearchedMovies([]);
-        }
-      } else {
-        setSearchedMovies([]);
-      }
+    const delayDebounceFn = setTimeout(() => {
+      searchWithPlaceholders(title);
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [title, setSearchedMovies]);
+  }, [title, searchWithPlaceholders]);
 
   // Add form submit handler to allow search on Enter
   const handleSubmit = (e) => {
     e.preventDefault();
     if (title.trim()) {
-      fetchSearchedMovies({ title, setSearchedMovies });
+      searchWithPlaceholders(title);
     }
   };
 
@@ -76,17 +121,37 @@ function Search() {
         </button>
       </form>
 
-      {title.trim() && searchedMovies.length === 0 && (
+      {/* Show "No results" only when search is complete and no results found */}
+      {title.trim() && searchedMovies.length === 0 && searchPlaceholders.length === 0 && !searchLoading && (
         <p className="text-center text-gray-600 my-8">
           No results found for "{title}"
         </p>
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        {searchedMovies.map((movie) => (
+        {/* Display search placeholder cards while loading */}
+        {searchPlaceholders.map((placeholder, index) => (
           <div
-            className="transition-transform duration-300 hover:scale-105 hover:z-10"
+            key={placeholder.id}
+            className="transition-all duration-500 ease-in-out"
+            style={{
+              animationDelay: `${index * 100}ms`
+            }}
+          >
+            <PlaceholderCard isLoading={true} />
+          </div>
+        ))}
+        
+        {/* Display actual search results */}
+        {searchedMovies.map((movie, index) => (
+          <div
+            className={`transition-all duration-500 hover:scale-105 hover:z-10 ${
+              searchPlaceholders.length === 0 ? 'animate-fade-up' : ''
+            }`}
             key={movie.id}
+            style={{
+              animationDelay: `${index * 50}ms`
+            }}
           >
             <MovieCard movie={movie} />
           </div>
