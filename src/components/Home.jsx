@@ -7,15 +7,24 @@ import PopularMoviesList from "./PopularMoviesList";
 import MovieContext from "../context/MovieContext";
 
 export default function Home() {
-  const { movies, setMovies, loading, setLoading } = useContext(MovieContext);
+  const {
+    movies,
+    setMovies,
+    loading,
+    setLoading,
+    setCurrentPage,
+    setHasMoreMovies,
+  } = useContext(MovieContext);
 
   //INSERTING DATA INTO MOVIES STATE
   useEffect(() => {
     async function popularMovies() {
       try {
         setLoading(true);
-        const popularMoviesData = await fetchPopularMovies();
-        setMovies(popularMoviesData);
+        const response = await fetchPopularMovies();
+        setMovies(response.movies);
+        setCurrentPage(response.currentPage);
+        setHasMoreMovies(response.currentPage < response.totalPages);
       } catch (err) {
         console.error(err);
         throw err;
@@ -24,7 +33,7 @@ export default function Home() {
       }
     }
     popularMovies();
-  }, [setMovies, setLoading]);
+  }, [setMovies, setLoading, setCurrentPage, setHasMoreMovies]);
   console.log(movies);
 
   if (loading || movies.length === 0)
