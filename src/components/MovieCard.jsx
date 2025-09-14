@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import MovieContext from "../context/MovieContext";
 
 const MovieCard = ({ movie, onFavouriteClick = () => {} }) => {
   const navigate = useNavigate();
   const [clickTimeout, setClickTimeout] = useState(null);
   const [imageError, setImageError] = useState(false);
+  const { toggleFavourite, isFavourite } = useContext(MovieContext);
 
   const handleClick = (e) => {
     if (clickTimeout) {
@@ -13,27 +14,8 @@ const MovieCard = ({ movie, onFavouriteClick = () => {} }) => {
       clearTimeout(clickTimeout); // Clear the single-click timeout
       setClickTimeout(null); // Reset the timeout state
 
-      // Save the movie details to localStorage
-      const favouriteMovies =
-        JSON.parse(localStorage.getItem("favouriteMovies")) || [];
-      const movieExists = favouriteMovies.find(
-        (favouriteMovie) => favouriteMovie.id === movie.id
-      );
-
-      if (!movieExists) {
-        favouriteMovies.push(movie);
-        localStorage.setItem(
-          "favouriteMovies",
-          JSON.stringify(favouriteMovies)
-        );
-        toast.success("Movie added to favourites!", {
-          icon: "⭐",
-        });
-      } else {
-        toast("Movie already exists in favourites ", {
-          icon: "⭐",
-        });
-      }
+      // Add to favourites using context
+      toggleFavourite(movie);
     } else {
       // Set a timeout for single-click detection
       const timeout = setTimeout(() => {
@@ -42,6 +24,13 @@ const MovieCard = ({ movie, onFavouriteClick = () => {} }) => {
       }, 200);
       setClickTimeout(timeout); // Save the timeout ID to state
     }
+  };
+
+  const handleFavouriteClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavourite(movie);
+    onFavouriteClick(movie);
   };
 
   return (
@@ -89,13 +78,14 @@ const MovieCard = ({ movie, onFavouriteClick = () => {} }) => {
               ⭐ {movie.vote_average.toFixed(1)}
             </span>
             <button
-              onClick={(e) => {
-                e.preventDefault();
-                onFavouriteClick(movie);
-              }}
-              className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-3 py-1.5 rounded-lg shadow hover:from-pink-600 hover:to-purple-600 font-semibold text-sm transition-all"
+              onClick={handleFavouriteClick}
+              className={`px-3 py-1.5 rounded-lg shadow font-semibold text-sm transition-all ${
+                isFavourite(movie.id)
+                  ? "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white"
+                  : "bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white"
+              }`}
             >
-              ♥ Favourite
+              {isFavourite(movie.id) ? "❌ Remove" : "♥ Favourite"}
             </button>
           </div>
         </div>

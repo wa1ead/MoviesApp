@@ -1,65 +1,90 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import MovieContext from "../context/MovieContext";
+import MovieCard from "./MovieCard";
 
 export default function Favourites() {
   const navigate = useNavigate();
-  //SAVING MOVIES FROM LOCALSTORAGE TO FAVOURITES VARIABLE
-  const favouriteMovies = JSON.parse(localStorage.getItem("favouriteMovies"));
-  console.log(favouriteMovies);
+  const { favouriteMovies, removeFromFavourites, clearFavourites } =
+    useContext(MovieContext);
 
-  if (!favouriteMovies) {
+  if (!favouriteMovies || favouriteMovies.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-white to-blue-300">
-        <h2 className="text-2xl font-bold text-blue-900 drop-shadow-lg">
-          You have not added any movie to favourites yet.
-        </h2>
+      <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-300 px-4 md:px-10 py-8 pb-32">
+        <div className="max-w-2xl mx-auto text-center">
+          <button
+            className="transition ease-in-out transform hover:scale-105 hover:translate-y-1 duration-300 mb-8 py-2 px-6 text-lg border-2 border-blue-300 rounded-full text-blue-900 bg-white shadow hover:bg-blue-100"
+            onClick={() => navigate(-1)}
+          >
+            <i className="fa-solid fa-arrow-left"></i> Back
+          </button>
+
+          <div className="bg-white/90 rounded-2xl shadow-xl border border-blue-200 p-12">
+            <div className="text-8xl mb-6">💔</div>
+            <h2 className="text-3xl font-bold text-blue-900 mb-4">
+              No Favourite Movies Yet
+            </h2>
+            <p className="text-blue-600 mb-6 text-lg">
+              You haven't added any movies to your favourites yet. Start
+              exploring and add some movies you love!
+            </p>
+            <Link
+              to="/"
+              className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-xl shadow-lg hover:from-blue-700 hover:to-blue-800 font-semibold transition-all duration-200 inline-block"
+            >
+              Explore Movies
+            </Link>
+          </div>
+        </div>
       </div>
     );
   }
   return (
-    <div className="min-h-screen px-0 py-10 bg-gradient-to-br from-blue-100 via-white to-blue-300 flex flex-col gap-6 items-center">
-      <button
-        className="transition ease-in-out transform hover:scale-105 hover:translate-y-1 duration-300 self-start py-2 px-6 text-lg border-2 border-blue-300 rounded-full text-blue-900 bg-white shadow hover:bg-blue-100"
-        onClick={() => navigate(-1)}
-      >
-        <i className="fa-solid fa-arrow-left"></i> Back
-      </button>
-      <h1 className="font-extrabold text-4xl text-center text-blue-900 mb-8 drop-shadow-lg">
-        Favourite Movies List ⭐
-      </h1>
-      <div className="flex flex-col gap-8 w-full max-w-4xl">
-        {favouriteMovies.map((fav) => (
-          <Link
-            to={`/description/${fav.id}`}
-            key={fav.id}
-            className="hover:scale-101 transition"
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-300 px-4 md:px-10 py-8 pb-32">
+      <div className="max-w-7xl mx-auto">
+        {/* Header Section */}
+        <div className="flex items-center justify-between mb-8">
+          <button
+            className="transition ease-in-out transform hover:scale-105 hover:translate-y-1 duration-300 py-2 px-6 text-lg border-2 border-blue-300 rounded-full text-blue-900 bg-white shadow hover:bg-blue-100"
+            onClick={() => navigate(-1)}
           >
-            <div className="bg-white/90 h-80 border rounded-2xl shadow-xl flex flex-col sm:flex-row overflow-hidden hover:shadow-2xl border-blue-200">
-              <div className="shrink-0 relative w-full sm:w-60 md:w-72 h-60 sm:h-full rounded-t-2xl sm:rounded-s-2xl overflow-hidden">
-                <img
-                  className="w-full h-full object-cover rounded-t-2xl sm:rounded-s-2xl border-2 border-blue-200"
-                  src={"https://image.tmdb.org/t/p/w500" + fav.poster_path}
-                  alt={fav.title}
+            <i className="fa-solid fa-arrow-left"></i> Back
+          </button>
+
+          {favouriteMovies.length > 0 && (
+            <button
+              onClick={clearFavourites}
+              className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-xl font-semibold transition-all duration-200"
+            >
+              Clear All
+            </button>
+          )}
+        </div>
+
+        {/* Title and Count */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r from-blue-800 via-blue-600 to-blue-800 bg-clip-text text-transparent drop-shadow-lg">
+            Your Favourite Movies ⭐
+          </h1>
+          <p className="text-blue-700 text-lg">
+            {favouriteMovies.length} movie
+            {favouriteMovies.length !== 1 ? "s" : ""} in your collection
+          </p>
+        </div>
+
+        {/* Movies Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+          {favouriteMovies.map((movie) => (
+            <div key={movie.id} className="relative group">
+              <div className="transition-transform duration-300 hover:scale-105">
+                <MovieCard
+                  movie={movie}
+                  onFavouriteClick={() => removeFromFavourites(movie.id)}
                 />
               </div>
-              <div className="flex flex-wrap w-full">
-                <div className="p-6 flex flex-col h-full justify-between">
-                  <h3 className="text-xl font-extrabold text-blue-900 mb-2 truncate drop-shadow-md">
-                    {fav.title}
-                  </h3>
-                  <p className="text-gray-700 text-sm mb-2 line-clamp-3">
-                    {fav.overview}
-                  </p>
-                  <div className="mt-5 sm:mt-auto">
-                    <p className="text-yellow-500 font-bold text-lg drop-shadow">
-                      ⭐ Rating: <b>{fav.vote_average.toFixed(1)}</b>
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
-          </Link>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
