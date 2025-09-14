@@ -17,7 +17,6 @@ function Search() {
   } = useContext(MovieContext);
 
   const inputRef = useRef(null);
-  const [loadingMovies, setLoadingMovies] = useState({});
 
   // Function to create placeholder cards
   const createSearchPlaceholders = useCallback((count) => {
