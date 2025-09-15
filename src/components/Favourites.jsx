@@ -1,12 +1,38 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import MovieContext from "../context/MovieContext";
+import AuthContext from "../context/AuthContext";
 import MovieCard from "./MovieCard";
 
 export default function Favourites() {
   const navigate = useNavigate();
   const { favouriteMovies, removeFromFavourites, clearFavourites } =
     useContext(MovieContext);
+  const { isLoggedIn, loading } = useContext(AuthContext);
+
+  // Additional authentication check at component level
+  useEffect(() => {
+    if (!loading && !isLoggedIn) {
+      navigate("/profile", { replace: true });
+    }
+  }, [isLoggedIn, loading, navigate]);
+
+  // Show loading while authentication is being checked
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-300 flex items-center justify-center">
+        <div className="flex items-center space-x-2 text-blue-900">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-900"></div>
+          <span className="text-xl font-semibold">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // If not logged in, return null (useEffect will handle redirect)
+  if (!isLoggedIn) {
+    return null;
+  }
 
   if (!favouriteMovies || favouriteMovies.length === 0) {
     return (
@@ -20,7 +46,7 @@ export default function Favourites() {
           </button>
 
           <div className="bg-white/90 rounded-2xl shadow-xl border border-blue-200 p-12">
-            <div className="text-8xl mb-6">💔</div>
+            <div className="text-8xl mb-6">❌</div>
             <h2 className="text-3xl font-bold text-blue-900 mb-4">
               No Favourite Movies Yet
             </h2>

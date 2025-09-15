@@ -6,16 +6,21 @@ import {
   FaExternalLinkAlt,
   FaCalendarAlt,
   FaClock,
+  FaHeart,
+  FaRegHeart,
 } from "react-icons/fa";
 import { MdOutlineSlowMotionVideo } from "react-icons/md";
 import MovieContext from "../context/MovieContext";
+import AuthContext from "../context/AuthContext";
 import fetchMovieDetails from "../services/fetchMovieDetails";
 import fetchMovieTrailer from "../services/fetchMovieTrailer";
 
 export default function MovieDescription() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { loading, setLoading } = useContext(MovieContext);
+  const { loading, setLoading, toggleFavourite, isFavourite } =
+    useContext(MovieContext);
+  const { isLoggedIn } = useContext(AuthContext);
   const [movie, setMovie] = useState(null);
   const [trailerKey, setTrailerKey] = useState(null);
   const [showTrailer, setShowTrailer] = useState(false);
@@ -35,6 +40,14 @@ export default function MovieDescription() {
     }
     load();
   }, [id, setLoading]);
+
+  const handleFavouriteClick = () => {
+    if (!isLoggedIn) {
+      navigate("/profile");
+      return;
+    }
+    toggleFavourite(movie);
+  };
 
   if (loading || !movie) {
     return (
@@ -133,6 +146,24 @@ export default function MovieDescription() {
                   <MdOutlineSlowMotionVideo /> Play Trailer
                 </button>
               )}
+              <button
+                onClick={handleFavouriteClick}
+                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold shadow-lg transition ${
+                  isFavourite(parseInt(id))
+                    ? "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white"
+                    : "bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white"
+                }`}
+              >
+                {isFavourite(parseInt(id)) ? (
+                  <>
+                    <FaHeart /> Remove from Favourites
+                  </>
+                ) : (
+                  <>
+                    <FaRegHeart /> Add to Favourites
+                  </>
+                )}
+              </button>
             </div>
 
             <p className="text-lg leading-relaxed text-blue-900 font-medium">

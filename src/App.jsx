@@ -9,6 +9,7 @@ import Search from "./components/Search";
 import Navigation from "./components/Navigation";
 import Categories from "./components/Categories";
 import Profile from "./components/Profile";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -22,7 +23,14 @@ function App() {
             <Route path="/search" element={<Search />} />
             <Route path="/categories" element={<Categories />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/favourites" element={<Favourites />} />
+            <Route
+              path="/favourites"
+              element={
+                <ProtectedRoute>
+                  <Favourites />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
           {/* Bottom Navigation Bar */}
           <Navigation />

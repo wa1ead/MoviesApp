@@ -1,18 +1,27 @@
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import MovieContext from "../context/MovieContext";
+import AuthContext from "../context/AuthContext";
 
 const MovieCard = ({ movie, onFavouriteClick = () => {} }) => {
   const navigate = useNavigate();
   const [clickTimeout, setClickTimeout] = useState(null);
   const [imageError, setImageError] = useState(false);
   const { toggleFavourite, isFavourite } = useContext(MovieContext);
+  const { isLoggedIn } = useContext(AuthContext);
 
   const handleClick = (e) => {
     if (clickTimeout) {
       // If a second click happens within the timeout, it's a double-click
       clearTimeout(clickTimeout); // Clear the single-click timeout
       setClickTimeout(null); // Reset the timeout state
+
+      // Check authentication before adding to favourites
+      if (!isLoggedIn) {
+        navigate("/profile");
+        return;
+      }
 
       // Add to favourites using context
       toggleFavourite(movie);
@@ -29,6 +38,13 @@ const MovieCard = ({ movie, onFavouriteClick = () => {} }) => {
   const handleFavouriteClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
+
+    // Check authentication before toggling favourite
+    if (!isLoggedIn) {
+      navigate("/profile");
+      return;
+    }
+
     toggleFavourite(movie);
     onFavouriteClick(movie);
   };
@@ -79,13 +95,21 @@ const MovieCard = ({ movie, onFavouriteClick = () => {} }) => {
             </span>
             <button
               onClick={handleFavouriteClick}
-              className={`px-3 py-1.5 rounded-lg shadow font-semibold text-sm transition-all ${
+              className={`px-3 py-1.5 flex justify-center items-center gap-2 rounded-lg shadow font-semibold text-sm transition-all ${
                 isFavourite(movie.id)
                   ? "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white"
                   : "bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white"
               }`}
             >
-              {isFavourite(movie.id) ? "❌ Remove" : "♥ Favourite"}
+              {isFavourite(movie.id) ? (
+                <>
+                  <FaHeart /> Remove
+                </>
+              ) : (
+                <>
+                  <FaRegHeart /> Favourite
+                </>
+              )}
             </button>
           </div>
         </div>

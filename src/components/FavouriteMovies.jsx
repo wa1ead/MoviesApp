@@ -35,7 +35,7 @@ function FavouriteMovies() {
         </div>
       ) : (
         <div className="text-center py-16">
-          <div className="text-6xl mb-4">💔</div>
+          <div className="text-6xl mb-4">❌</div>
           <h3 className="text-xl font-bold text-blue-900 mb-2">
             No Favourite Movies Yet
           </h3>
