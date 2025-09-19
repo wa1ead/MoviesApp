@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 export default function FeaturedFilm({ movie }) {
+  const navigate = useNavigate();
+
   return (
     <section className="mx-auto my-10 p-8 bg-white/90 rounded-3xl shadow-2xl flex flex-col md:flex-row items-center gap-10 max-w-5xl">
       <img
@@ -18,7 +22,7 @@ export default function FeaturedFilm({ movie }) {
         </p>
         <button
           className="mt-4 px-8 py-3 bg-blue-900 text-white rounded-xl hover:bg-blue-700 shadow-md font-semibold text-lg transition"
-          onClick={() => (window.location.href = `/description/${movie.id}`)}
+          onClick={() => navigate(`/description/${movie.id}`)}
         >
           View Description
         </button>
