@@ -28,7 +28,9 @@ export default function MovieDescription() {
     async function load() {
       try {
         setLoading(true);
+        console.log("MovieDescription - ID from params:", id);
         const data = await fetchMovieDetails({ id });
+        console.log("MovieDescription - Fetched movie data:", data);
         setMovie(data);
         const trailer = await fetchMovieTrailer(id);
         if (trailer) setTrailerKey(trailer.key);
