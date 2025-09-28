@@ -6,7 +6,8 @@ import FavouriteMovies from "./FavouriteMovies";
 
 function Profile() {
   const { isLoggedIn, user, logout, loading } = useContext(AuthContext);
-  const { favouriteMovies, loadUserFavourites, clearUserFavourites } = useContext(MovieContext);
+  const { favouriteMovies, loadUserFavourites, clearUserFavourites } =
+    useContext(MovieContext);
 
   // Sync favourites with auth state
   useEffect(() => {
@@ -15,7 +16,13 @@ function Profile() {
     } else if (!loading) {
       clearUserFavourites();
     }
-  }, [isLoggedIn, user?.email, loading, loadUserFavourites, clearUserFavourites]);
+  }, [
+    isLoggedIn,
+    user?.email,
+    loading,
+    loadUserFavourites,
+    clearUserFavourites,
+  ]);
 
   // Show loading spinner while auth is being checked
   if (loading) {
