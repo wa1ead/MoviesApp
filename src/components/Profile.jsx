@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import AuthContext from "../context/AuthContext";
 import MovieContext from "../context/MovieContext";
 import LoginRegister from "./LoginRegister";
@@ -6,7 +6,16 @@ import FavouriteMovies from "./FavouriteMovies";
 
 function Profile() {
   const { isLoggedIn, user, logout, loading } = useContext(AuthContext);
-  const { favouriteMovies } = useContext(MovieContext);
+  const { favouriteMovies, loadUserFavourites, clearUserFavourites } = useContext(MovieContext);
+
+  // Sync favourites with auth state
+  useEffect(() => {
+    if (isLoggedIn && user?.email) {
+      loadUserFavourites(user.email);
+    } else if (!loading) {
+      clearUserFavourites();
+    }
+  }, [isLoggedIn, user?.email, loading, loadUserFavourites, clearUserFavourites]);
 
   // Show loading spinner while auth is being checked
   if (loading) {

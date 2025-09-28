@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
 
 export const MovieContext = createContext();
@@ -14,28 +14,56 @@ export function MovieProvider({ children }) {
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchPlaceholders, setSearchPlaceholders] = useState([]);
   const [favouriteMovies, setFavouriteMovies] = useState([]);
+  const [currentUserEmail, setCurrentUserEmail] = useState(null);
 
-  // Load favourite movies from localStorage on app startup
-  useEffect(() => {
-    const savedFavourites = localStorage.getItem("favouriteMovies");
-    if (savedFavourites) {
-      try {
-        const parsedFavourites = JSON.parse(savedFavourites);
-        setFavouriteMovies(parsedFavourites);
-      } catch (error) {
-        console.error("Error parsing favourite movies:", error);
-        localStorage.removeItem("favouriteMovies");
+  // Load favourite movies from localStorage for current user
+  const loadUserFavourites = useCallback((userEmail) => {
+    if (userEmail) {
+      const userFavouritesKey = `favouriteMovies_${userEmail}`;
+      const savedFavourites = localStorage.getItem(userFavouritesKey);
+      if (savedFavourites) {
+        try {
+          const parsedFavourites = JSON.parse(savedFavourites);
+          setFavouriteMovies(parsedFavourites);
+        } catch (error) {
+          console.error("Error parsing favourite movies:", error);
+          localStorage.removeItem(userFavouritesKey);
+          setFavouriteMovies([]);
+        }
+      } else {
+        setFavouriteMovies([]);
       }
+      setCurrentUserEmail(userEmail);
     }
   }, []);
 
+  // Clear favourites when user logs out
+  const clearUserFavourites = useCallback(() => {
+    setFavouriteMovies([]);
+    setCurrentUserEmail(null);
+    // Also clear from localStorage
+    if (currentUserEmail) {
+      localStorage.removeItem(`favouriteMovies_${currentUserEmail}`);
+    }
+  }, [currentUserEmail]);
+
   // Save favourite movies to localStorage whenever favourites change
   useEffect(() => {
-    localStorage.setItem("favouriteMovies", JSON.stringify(favouriteMovies));
-  }, [favouriteMovies]);
+    if (currentUserEmail && favouriteMovies.length >= 0) {
+      const userFavouritesKey = `favouriteMovies_${currentUserEmail}`;
+      localStorage.setItem(userFavouritesKey, JSON.stringify(favouriteMovies));
+    }
+  }, [favouriteMovies, currentUserEmail]);
 
   // Add movie to favourites
   const addToFavourites = (movie) => {
+    if (!currentUserEmail) {
+      toast.error("Please log in to add movies to favourites", {
+        icon: "🔐",
+      });
+      return false;
+    }
+
     const movieExists = favouriteMovies.find(
       (favouriteMovie) => favouriteMovie.id === movie.id
     );
@@ -56,6 +84,13 @@ export function MovieProvider({ children }) {
 
   // Remove movie from favourites
   const removeFromFavourites = (movieId) => {
+    if (!currentUserEmail) {
+      toast.error("Please log in to manage favourites", {
+        icon: "🔐",
+      });
+      return false;
+    }
+
     const movieExists = favouriteMovies.find(
       (favouriteMovie) => favouriteMovie.id === movieId
     );
@@ -76,6 +111,13 @@ export function MovieProvider({ children }) {
 
   // Toggle movie favourite status
   const toggleFavourite = (movie) => {
+    if (!currentUserEmail) {
+      toast.error("Please log in to manage favourites", {
+        icon: "🔐",
+      });
+      return false;
+    }
+
     const movieExists = favouriteMovies.find(
       (favouriteMovie) => favouriteMovie.id === movie.id
     );
@@ -94,10 +136,18 @@ export function MovieProvider({ children }) {
 
   // Clear all favourites
   const clearFavourites = () => {
+    if (!currentUserEmail) {
+      toast.error("Please log in to manage favourites", {
+        icon: "🔐",
+      });
+      return false;
+    }
+
     setFavouriteMovies([]);
     toast.success("All favourites cleared!", {
       icon: "🧹",
     });
+    return true;
   };
 
   return (
@@ -128,6 +178,8 @@ export function MovieProvider({ children }) {
         toggleFavourite,
         isFavourite,
         clearFavourites,
+        loadUserFavourites,
+        clearUserFavourites,
       }}
     >
       {children}

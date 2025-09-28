@@ -46,11 +46,11 @@ export default function Home() {
     );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-300 px-0   md:px-10 pb-24">
-      {/* Featured Film Section */}
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-300 pb-24">
+      {/* Featured Film Section - Full Width */}
       <FeaturedFilm movie={movies[0]} />
       {/* Trending Films List */}
-      <main className="mt-8">
+      <main className="px-0 md:px-10 mt-8">
         <PopularMoviesList movies={movies.slice(1)} />
       </main>
     </div>
